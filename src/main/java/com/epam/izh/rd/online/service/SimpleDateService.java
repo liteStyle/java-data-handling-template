@@ -2,6 +2,7 @@ package com.epam.izh.rd.online.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
 
 public class SimpleDateService implements DateService {
@@ -14,7 +15,9 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String parseDate(LocalDate localDate) {
-        return null;
+        DateTimeFormatter dTime = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String date = localDate.format(dTime);
+        return date;
     }
 
     /**
@@ -25,7 +28,9 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public LocalDateTime parseString(String string) {
-        return null;
+        DateTimeFormatter dTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime localDateTime = LocalDateTime.parse(string, dTimeFormat);
+        return localDateTime;
     }
 
     /**
@@ -37,7 +42,7 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public String convertToCustomFormat(LocalDate localDate, DateTimeFormatter formatter) {
-        return null;
+        return localDate.format(formatter);
     }
 
     /**
@@ -47,7 +52,16 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getNextLeapYear() {
-        return 0;
+        Year year = Year.now();
+        boolean isLeapYear = year.isLeap();
+        if(isLeapYear == true) {
+            return Long.valueOf(String.valueOf(year));
+        }
+        long leapYear = Long.valueOf(String.valueOf(year));
+        while(isLeapYear != true) {
+            isLeapYear = Year.isLeap(++leapYear);
+        }
+        return leapYear;
     }
 
     /**
@@ -57,7 +71,11 @@ public class SimpleDateService implements DateService {
      */
     @Override
     public long getSecondsInYear(int year) {
-        return 0;
+        boolean isLeapYear = Year.isLeap(year);
+        if(isLeapYear == true) {
+            return 366 * 24 * 60 * 60;
+        }
+        return 365 * 24 * 60 * 60;
     }
 
 
